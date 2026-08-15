@@ -23,96 +23,32 @@
 
     <div class="flex items-baseline gap-3 mb-6">
       <h1 class="font-display text-3xl font-bold tracking-tight text-[#12151A]">Contactos</h1>
-      <p class="font-mono text-sm text-[#565F5C]">4 contactos guardados</p>
+      <p>{{ contactStore.count() }} contactos guardados</p>
     </div>
 
     <!-- GRID -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-      <!-- Contacto 1 -->
-      <div class="group relative bg-white border border-[#DDE5DA] rounded-[22px] p-5 shadow-[0_1px_2px_rgba(18,21,26,0.04),0_8px_20px_-12px_rgba(18,21,26,0.12)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(18,21,26,0.22)] hover:border-transparent">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-sm mb-3.5 text-white"
-             style="background:linear-gradient(135deg,#5B4FE9,#8F7FFF)">
-          LG
+      @for (contact of contactStore.filteredContacts(); track contact.id) {
+        <div class="group relative bg-white border border-[#DDE5DA] rounded-[22px] p-5 shadow-[0_1px_2px_rgba(18,21,26,0.04),0_8px_20px_-12px_rgba(18,21,26,0.12)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(18,21,26,0.22)] hover:border-transparent">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-sm mb-3.5 text-white"
+               style="background:linear-gradient(135deg,#5B4FE9,#8F7FFF)">
+            {{ contact.name.charAt(0) }}
+          </div>
+          <div class="absolute top-4 right-4 flex gap-1 opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
+            <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#5B4FE9] hover:text-white flex items-center justify-center transition-colors" [attr.aria-label]="'Editar ' + contact.name" (click)="openModal(true, contact)">
+              <i class="pi pi-pencil text-xs"></i>
+            </button>
+            <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#FF6459] hover:text-white flex items-center justify-center transition-colors" [attr.aria-label]="'Eliminar ' + contact.name" (click)="confirmDelete(contact)">
+              <i class="pi pi-trash text-xs"></i>
+            </button>
+          </div>
+          <h3 class="font-display font-semibold text-base mb-2 tracking-tight text-[#12151A]">{{ contact.name }}</h3>
+          <div class="font-mono text-xs text-[#565F5C] leading-relaxed space-y-1">
+            <div class="flex gap-2 items-start"><i class="pi pi-envelope text-[10px] mt-0.5 text-stone-400"></i><span class="break-all">{{ contact.email }}</span></div>
+            <div class="flex gap-2 items-start"><i class="pi pi-phone text-[10px] mt-0.5 text-stone-400"></i><span>{{ contact.phone }}</span></div>
+          </div>
         </div>
-        <div class="absolute top-4 right-4 flex gap-1 opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#5B4FE9] hover:text-white flex items-center justify-center transition-colors" aria-label="Editar Laura Gómez">
-            <i class="pi pi-pencil text-xs"></i>
-          </button>
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#FF6459] hover:text-white flex items-center justify-center transition-colors" aria-label="Eliminar Laura Gómez">
-            <i class="pi pi-trash text-xs"></i>
-          </button>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2 tracking-tight text-[#12151A]">Laura Gómez</h3>
-        <div class="font-mono text-xs text-[#565F5C] leading-relaxed space-y-1">
-          <div class="flex gap-2 items-start"><i class="pi pi-envelope text-[10px] mt-0.5 text-stone-400"></i><span class="break-all">laura.gomez&#64;email.com</span></div>
-          <div class="flex gap-2 items-start"><i class="pi pi-phone text-[10px] mt-0.5 text-stone-400"></i><span>+57 300 123 4567</span></div>
-        </div>
-      </div>
-
-      <!-- Contacto 2 -->
-      <div class="group relative bg-white border border-[#DDE5DA] rounded-[22px] p-5 shadow-[0_1px_2px_rgba(18,21,26,0.04),0_8px_20px_-12px_rgba(18,21,26,0.12)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(18,21,26,0.22)] hover:border-transparent">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-sm mb-3.5 text-white"
-             style="background:linear-gradient(135deg,#16A085,#6EE7B7)">
-          AR
-        </div>
-        <div class="absolute top-4 right-4 flex gap-1 opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#5B4FE9] hover:text-white flex items-center justify-center transition-colors" aria-label="Editar Andrés Rojas">
-            <i class="pi pi-pencil text-xs"></i>
-          </button>
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#FF6459] hover:text-white flex items-center justify-center transition-colors" aria-label="Eliminar Andrés Rojas" >
-            <i class="pi pi-trash text-xs"></i>
-          </button>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2 tracking-tight text-[#12151A]">Andrés Rojas</h3>
-        <div class="font-mono text-xs text-[#565F5C] leading-relaxed space-y-1">
-          <div class="flex gap-2 items-start"><i class="pi pi-envelope text-[10px] mt-0.5 text-stone-400"></i><span class="break-all">andres.rojas&#64;email.com</span></div>
-          <div class="flex gap-2 items-start"><i class="pi pi-phone text-[10px] mt-0.5 text-stone-400"></i><span>+57 301 987 6543</span></div>
-        </div>
-      </div>
-
-      <!-- Contacto 3 -->
-      <div class="group relative bg-white border border-[#DDE5DA] rounded-[22px] p-5 shadow-[0_1px_2px_rgba(18,21,26,0.04),0_8px_20px_-12px_rgba(18,21,26,0.12)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(18,21,26,0.22)] hover:border-transparent">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-sm mb-3.5"
-             style="background:linear-gradient(135deg,#C6FF6B,#16A085); color:#12151A">
-          CT
-        </div>
-        <div class="absolute top-4 right-4 flex gap-1 opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#5B4FE9] hover:text-white flex items-center justify-center transition-colors" aria-label="Editar Camila Torres">
-            <i class="pi pi-pencil text-xs"></i>
-          </button>
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#FF6459] hover:text-white flex items-center justify-center transition-colors" aria-label="Eliminar Camila Torres">
-            <i class="pi pi-trash text-xs"></i>
-          </button>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2 tracking-tight text-[#12151A]">Camila Torres</h3>
-        <div class="font-mono text-xs text-[#565F5C] leading-relaxed space-y-1">
-          <div class="flex gap-2 items-start"><i class="pi pi-envelope text-[10px] mt-0.5 text-stone-400"></i><span class="break-all">camila.torres&#64;email.com</span></div>
-          <div class="flex gap-2 items-start"><i class="pi pi-phone text-[10px] mt-0.5 text-stone-400"></i><span>+57 315 456 7890</span></div>
-        </div>
-      </div>
-
-      <!-- Contacto 4 -->
-      <div class="group relative bg-white border border-[#DDE5DA] rounded-[22px] p-5 shadow-[0_1px_2px_rgba(18,21,26,0.04),0_8px_20px_-12px_rgba(18,21,26,0.12)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(18,21,26,0.22)] hover:border-transparent">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-sm mb-3.5 text-white"
-             style="background:linear-gradient(135deg,#FF6459,#5B4FE9)">
-          JH
-        </div>
-        <div class="absolute top-4 right-4 flex gap-1 opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#5B4FE9] hover:text-white flex items-center justify-center transition-colors" aria-label="Editar Julián Herrera">
-            <i class="pi pi-pencil text-xs"></i>
-          </button>
-          <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#FF6459] hover:text-white flex items-center justify-center transition-colors" aria-label="Eliminar Julián Herrera">
-            <i class="pi pi-trash text-xs"></i>
-          </button>
-        </div>
-        <h3 class="font-display font-semibold text-base mb-2 tracking-tight text-[#12151A]">Julián Herrera</h3>
-        <div class="font-mono text-xs text-[#565F5C] leading-relaxed space-y-1">
-          <div class="flex gap-2 items-start"><i class="pi pi-envelope text-[10px] mt-0.5 text-stone-400"></i><span class="break-all">julian.herrera&#64;email.com</span></div>
-          <div class="flex gap-2 items-start"><i class="pi pi-phone text-[10px] mt-0.5 text-stone-400"></i><span>+57 320 234 5678</span></div>
-        </div>
-      </div>
-
+      }
     </div>
 
   </div>
@@ -120,4 +56,6 @@
 <contact-form [visible]="showModal"
  (visibleChange)="openModal($event)"
  (sendContact)="saveContact($event)"
+ [contact]="editingContact()"
 ></contact-form>
+<p-confirmDialog />

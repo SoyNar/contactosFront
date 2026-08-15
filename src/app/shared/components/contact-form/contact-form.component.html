@@ -1,7 +1,7 @@
 <p-dialog
   [visible]="visible()"
   (visibleChange)="visibleChange.emit($event)"
-  [header]="headerTitle() ? 'Editar contacto' : 'Nuevo contacto'"
+  [header]="isEdit ? 'Editar contacto' : 'Nuevo contacto'"
   [modal]="true"
   [dismissableMask]="true"
   [draggable]="false"

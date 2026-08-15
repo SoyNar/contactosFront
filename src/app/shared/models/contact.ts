@@ -5,3 +5,11 @@ export interface Contact{
     email:string;
     phone:string;
 }
+
+export interface ContactState
+ {
+    contacts: Contact[];
+    query: string;
+    loading:boolean;
+    error:string | null;
+}

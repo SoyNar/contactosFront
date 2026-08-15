@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { InputMaskModule } from 'primeng/inputmask';
 import { ButtonModule } from 'primeng/button';
@@ -18,8 +18,23 @@ export class ContactFormComponent {
      headerTitle = signal<boolean>(false);
      visibleChange = output<boolean>();
      sendContact = output<any>();
+     contact = input<Contact | null>(null);
 
      private fb = inject(FormBuilder);
+
+     public constructor() {
+      effect(() => {
+          const c = this.contact();
+            this.form.patchValue({
+               name: c?.name ?? '',
+               email: c?.email ?? '',
+               phone: c?.phone ?? ''
+            });
+         if(this.contact()){
+            this.headerTitle.set(true);
+         }
+      })
+     }
 
      //
      form = this.fb.group({
@@ -27,7 +42,11 @@ export class ContactFormComponent {
         email: ['',[Validators.email,Validators.required]],
         phone: ['',[Validators.required]]
      });
-     
+
+     get isEdit(){
+      return !!this.contact();
+     }
+        
 
      openModal(value:boolean){
         this.visibleChange.emit(value);

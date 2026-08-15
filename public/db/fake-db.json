@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Laura Gómez", "email": "laura.gomez@email.com", "phone": "+57 300 123 4567" },
+  { "id": 2, "name": "Andrés Rojas", "email": "andres.rojas@email.com", "phone": "+57 301 987 6543" },
+  { "id": 3, "name": "Camila Torres", "email": "camila.torres@email.com", "phone": "+57 315 456 7890" },
+  { "id": 4, "name": "Julián Herrera", "email": "julian.herrera@email.com", "phone": "+57 320 234 5678" },
+  { "id": 5, "name": "Mateo Salazar", "email": "mateo.salazar@email.com", "phone": "+57 312 678 9012" },
+  { "id": 6, "name": "Valentina Ospina", "email": "valentina.ospina@email.com", "phone": "+57 318 345 6789" }
+]
