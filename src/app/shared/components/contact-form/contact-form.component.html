@@ -1,1 +1,77 @@
-<p>contact-form works!</p>
+<p-dialog
+  [visible]="visible()"
+  (visibleChange)="visibleChange.emit($event)"
+  [header]="headerTitle() ? 'Editar contacto' : 'Nuevo contacto'"
+  [modal]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="w-full max-w-md">
+
+  <p class="text-sm text-stone-500 -mt-2 mb-5">
+    Completa los datos del contacto
+  </p>
+
+  <form  id="contactForm"   class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Nombre -->
+    <div class="flex flex-col gap-1.5">
+      <label for="nombre" class="text-xs font-medium text-stone-600">
+        Nombre completo
+      </label>
+      <input
+        formControlName="name"
+        pInputText
+        id="nombre"
+        placeholder="Ej. Mariana Ríos"
+        class="w-full" />
+    </div>
+
+    <!-- Correo -->
+    <div class="flex flex-col gap-1.5">
+      <label for="email" class="text-xs font-medium text-stone-600">
+        Correo electrónico
+      </label>
+      <input
+      formControlName="email"
+        pInputText
+        id="email"
+        type="email"
+        placeholder="nombre&#64;email.com"
+        class="w-full" />
+    </div>
+
+    <!-- Teléfono -->
+    <div class="flex flex-col gap-1.5">
+      <label for="telefono" class="text-xs font-medium text-stone-600">
+        Teléfono
+      </label>
+      <p-inputMask
+        formControlName="phone"
+        id="telefono"
+        mask="+99 999 999 9999"
+        placeholder="+57 300 000 0000"
+        styleClass="w-full" />
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex gap-3">
+      <p-button
+        (click)="close()"
+        type="button"
+        label="Cancelar"
+        severity="secondary"
+        [outlined]="true" />
+         <button
+      pButton
+      type="submit"
+      form="contactForm"
+      [label]="headerTitle() ? 'Editar contacto' : 'Nuevo contacto'"
+      class="flex-1 justify-center">
+    </button>
+    </div>
+  </ng-template>
+
+</p-dialog>
