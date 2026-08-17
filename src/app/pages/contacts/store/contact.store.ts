@@ -23,7 +23,7 @@ export const ContactsStore = signalStore(
       return contacts().filter(c =>
         c.name.toLowerCase().includes(q) ||
         c.email.toLowerCase().includes(q) ||
-        c.phone.toLowerCase().includes(q)
+        c.phone?.some(phone_number => phone_number.toLowerCase().includes(q))
       );
     }),
     count: computed(() => contacts().length),
@@ -37,29 +37,43 @@ export const ContactsStore = signalStore(
     async load() {
       patchState(store, { loading: true, error: null });
       try {
-        const contacts = await firstValueFrom(contactsService.getAll());
-        patchState(store, { contacts, loading: false });
+        const response = await firstValueFrom(contactsService.getAll());
+        if (response.success && response.data) {
+          patchState(store, { contacts: response.data, loading: false });
+        } else {
+          patchState(store, { loading: false, error: response.error || 'No se pudieron cargar los contactos' });
+        }
       } catch {
         patchState(store, { loading: false, error: 'No se pudieron cargar los contactos' });
       }
     },
 
-    // async create(contact: Omit<Contact, 'id'>) {
-    //   const created = await firstValueFrom(contactsService.create(contact));
-    //   patchState(store, { contacts: [...store.contacts(), created] });
-    // },
+   async create(contact: Omit<Contact, 'id'>) {
+  patchState(store, { error: null });
+  try {
+    const response = await firstValueFrom(contactsService.create(contact));
+    patchState(store, { contacts: [...store.contacts(), response.data] });
+  } catch (err: any) {
+    patchState(store, { error: err?.error?.error ?? 'No se pudo crear el contacto' });
+  }
+},
 
-    // async update(id: number, changes: Partial<Contact>) {
-    //   const updated = await firstValueFrom(contactsService.update(id, changes));
-    //   patchState(store, {
-    //     contacts: store.contacts().map(c => (c.id === id ? updated : c)),
-    //   });
-    // },
+   async update(id: number, changes: Partial<Contact>) {
+  patchState(store, { error: null });
+  try {
+    const response = await firstValueFrom(contactsService.update(id, changes));
+    patchState(store, {
+      contacts: store.contacts().map(c => (c.id === id ? response.data : c)),
+    });
+  } catch (err: any) {
+    patchState(store, { error: err?.error?.error ?? 'No se pudo actualizar el contacto' });
+  }
+},
 
-    // async remove(id: number) {
-    //   await firstValueFrom(contactsService.delete(id));
-    //   patchState(store, { contacts: store.contacts().filter(c => c.id !== id) });
-    // },
+    async remove(id: number) {
+      await firstValueFrom(contactsService.delete(id));
+      patchState(store, { contacts: store.contacts().filter(c => c.id !== id) });
+    },
   }))
 );
 

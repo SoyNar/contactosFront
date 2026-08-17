@@ -1,61 +1,76 @@
 <div class="min-h-screen bg-[#F4F7F2] font-sans text-[#12151A] py-10 px-6">
   <div class="max-w-6xl mx-auto">
 
-    <!-- TOPBAR -->
-    <div class="flex flex-wrap items-center gap-4 mb-10">
-      <div class="flex items-center gap-2 font-display font-bold text-lg mr-auto">
-        <span class="w-2.5 h-2.5 rounded-full bg-[#5B4FE9] shadow-[0_0_0_4px_rgba(91,79,233,0.15)]"></span>
-        Nodo
-      </div>
+<!-- TOPBAR -->
+<div class="flex flex-wrap items-center gap-4 mb-10">
+<div class="flex items-center gap-2 font-display font-bold text-lg mr-auto">
+<span class="w-2.5 h-2.5 rounded-full bg-[#5B4FE9] shadow-[0_0_0_4px_rgba(91,79,233,0.15)]"></span>
+        Prueba técnica
+</div>
 
-      <div class="relative flex-1 min-w-[260px] max-w-[420px]">
-        <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-[#565F5C] text-sm"></i>
-        <input type="text" placeholder="Buscar por nombre, correo o teléfono"
-               class="w-full rounded-full border border-[#DDE5DA] bg-white pl-10 pr-4 py-2.5 text-sm text-[#12151A] placeholder-[#9AA39B]" />
-      </div>
+<div class="relative flex-1 min-w-[260px] max-w-[420px]">
+<i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-[#565F5C] text-sm"></i>
+<input type="text" placeholder="Buscar por nombre, correo o teléfono"
+class="w-full rounded-full border border-[#DDE5DA] bg-white pl-10 pr-4 py-2.5 text-sm text-[#12151A] placeholder-[#9AA39B]"
+[value]="contactStore.query()"
+(input)="contactStore.setQuery($any($event.target).value)" />
+</div>
 
-      <button class="inline-flex items-center gap-2 bg-[#12151A] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#4438D1] transition"
-              (click)="openModal(true)">
-        <i class="pi pi-plus text-xs"></i>
+<button class="inline-flex items-center gap-2 bg-[#12151A] text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#4438D1] transition"
+(click)="openModal(true)">
+<i class="pi pi-plus text-xs"></i>
         Nuevo contacto
-      </button>
-    </div>
+</button>
+</div>
 
-    <div class="flex items-baseline gap-3 mb-6">
-      <h1 class="font-display text-3xl font-bold tracking-tight text-[#12151A]">Contactos</h1>
-      <p>{{ contactStore.count() }} contactos guardados</p>
-    </div>
+<div class="flex items-baseline gap-3 mb-6">
+<h1 class="font-display text-3xl font-bold tracking-tight text-[#12151A]">Contactos</h1>
+<p>{{ contactStore.count() }} contactos guardados</p>
+</div>
 
-    <!-- GRID -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- GRID -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       @for (contact of contactStore.filteredContacts(); track contact.id) {
-        <div class="group relative bg-white border border-[#DDE5DA] rounded-[22px] p-5 shadow-[0_1px_2px_rgba(18,21,26,0.04),0_8px_20px_-12px_rgba(18,21,26,0.12)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(18,21,26,0.22)] hover:border-transparent">
-          <div class="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-sm mb-3.5 text-white"
-               style="background:linear-gradient(135deg,#5B4FE9,#8F7FFF)">
+<div class="group relative bg-white border border-[#DDE5DA] rounded-[22px] p-5 shadow-[0_1px_2px_rgba(18,21,26,0.04),0_8px_20px_-12px_rgba(18,21,26,0.12)] transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-18px_rgba(18,21,26,0.22)] hover:border-transparent">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-sm mb-3.5 text-white"
+style="background:linear-gradient(135deg,#5B4FE9,#8F7FFF)">
             {{ contact.name.charAt(0) }}
-          </div>
-          <div class="absolute top-4 right-4 flex gap-1 opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
-            <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#5B4FE9] hover:text-white flex items-center justify-center transition-colors" [attr.aria-label]="'Editar ' + contact.name" (click)="openModal(true, contact)">
-              <i class="pi pi-pencil text-xs"></i>
-            </button>
-            <button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#FF6459] hover:text-white flex items-center justify-center transition-colors" [attr.aria-label]="'Eliminar ' + contact.name" (click)="confirmDelete(contact)">
-              <i class="pi pi-trash text-xs"></i>
-            </button>
-          </div>
-          <h3 class="font-display font-semibold text-base mb-2 tracking-tight text-[#12151A]">{{ contact.name }}</h3>
-          <div class="font-mono text-xs text-[#565F5C] leading-relaxed space-y-1">
-            <div class="flex gap-2 items-start"><i class="pi pi-envelope text-[10px] mt-0.5 text-stone-400"></i><span class="break-all">{{ contact.email }}</span></div>
-            <div class="flex gap-2 items-start"><i class="pi pi-phone text-[10px] mt-0.5 text-stone-400"></i><span>{{ contact.phone }}</span></div>
-          </div>
-        </div>
+</div>
+<div class="absolute top-4 right-4 flex gap-1 opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#5B4FE9] hover:text-white flex items-center justify-center transition-colors" [attr.aria-label]="'Editar ' + contact.name" (click)="openModal(true, contact)">
+<i class="pi pi-pencil text-xs"></i>
+</button>
+<button class="w-8 h-8 rounded-lg bg-[#EDF2EA] text-[#565F5C] hover:bg-[#FF6459] hover:text-white flex items-center justify-center transition-colors" [attr.aria-label]="'Eliminar ' + contact.name" (click)="confirmDelete(contact)">
+<i class="pi pi-trash text-xs"></i>
+</button>
+</div>
+<h3 class="font-display font-semibold text-base mb-2 tracking-tight text-[#12151A]">{{ contact.name }}</h3>
+<div class="font-mono text-xs text-[#565F5C] leading-relaxed space-y-2">
+<div class="flex gap-2 items-start"><i class="pi pi-envelope text-[10px] mt-0.5 text-stone-400"></i><span class="break-all">{{ contact.email }}</span></div>
+<div class="flex gap-2 items-start">
+<i class="pi pi-phone text-[10px] mt-1 text-stone-400"></i>
+@if (contact.phone && contact.phone.length > 0) {
+<div class="flex flex-wrap gap-1.5">
+  @for (phone of contact.phone; track phone) {
+    <span class="px-2 py-0.5 bg-[#EDF2EA] text-[#565F5C] rounded-full text-[11px] font-mono">
+      {{ phone }}
+    </span>
+  }
+</div>
+} @else {
+<span class="text-[#9AA39B] italic">Sin teléfono</span>
+}
+</div>
+</div>
+</div>
       }
-    </div>
+</div>
 
-  </div>
+</div>
 </div>
 <contact-form [visible]="showModal"
- (visibleChange)="openModal($event)"
- (sendContact)="saveContact($event)"
- [contact]="editingContact()"
+(visibleChange)="openModal($event)"
+(sendContact)="saveContact($event)"
+[contact]="editingContact()"
 ></contact-form>
 <p-confirmDialog />

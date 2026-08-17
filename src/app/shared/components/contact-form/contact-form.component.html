@@ -12,7 +12,7 @@
     Completa los datos del contacto
   </p>
 
-  <form  id="contactForm"   class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <form id="contactForm" class="flex flex-col gap-4" [formGroup]="form" (ngSubmit)="onSubmit()">
 
     <!-- Nombre -->
     <div class="flex flex-col gap-1.5">
@@ -25,6 +25,15 @@
         id="nombre"
         placeholder="Ej. Mariana Ríos"
         class="w-full" />
+      @if (form.get('name')?.invalid && form.get('name')?.touched) {
+        <span class="text-xs text-red-500">
+          @if (form.get('name')?.hasError('required')) {
+            El nombre es obligatorio
+          } @else if (form.get('name')?.hasError('minlength')) {
+            El nombre debe tener al menos 2 caracteres
+          }
+        </span>
+      }
     </div>
 
     <!-- Correo -->
@@ -33,25 +42,62 @@
         Correo electrónico
       </label>
       <input
-      formControlName="email"
+        formControlName="email"
         pInputText
         id="email"
         type="email"
         placeholder="nombre&#64;email.com"
         class="w-full" />
+      @if (form.get('email')?.invalid && form.get('email')?.touched) {
+        <span class="text-xs text-red-500">
+          @if (form.get('email')?.hasError('required')) {
+            El correo es obligatorio
+          } @else if (form.get('email')?.hasError('email')) {
+            Ingresa un correo válido
+          }
+        </span>
+      }
     </div>
 
-    <!-- Teléfono -->
+    <!-- Teléfonos -->
     <div class="flex flex-col gap-1.5">
-      <label for="telefono" class="text-xs font-medium text-stone-600">
-        Teléfono
+      <label class="text-xs font-medium text-stone-600">
+        Teléfonos
       </label>
-      <p-inputMask
-        formControlName="phone"
-        id="telefono"
-        mask="+99 999 999 9999"
-        placeholder="+57 300 000 0000"
-        styleClass="w-full" />
+  <div formArrayName="phones" class="flex flex-col gap-2">
+  @for (phoneCtrl of phones.controls; track phoneCtrl) {
+    <div class="flex flex-col gap-1">
+      <div class="flex gap-2 items-center">
+        <input
+          pInputText
+          [formControlName]="$index"
+          placeholder="+57 300 000 0000"
+          class="w-full" />
+        @if (phones.length > 1) {
+          <button
+            type="button"
+            (click)="removePhone($index)"
+            class="w-8 h-8 flex items-center justify-center rounded-lg text-stone-400 hover:bg-red-50 hover:text-red-500 transition-colors shrink-0">
+            <i class="pi pi-trash text-xs"></i>
+          </button>
+        }
+      </div>
+    @if (phoneCtrl.hasError('required')) {
+  El teléfono es obligatorio
+} @else if (phoneCtrl.hasError('phoneLength')) {
+  El teléfono debe tener entre 7 y 15 dígitos
+}
+    </div>
+  }
+</div>
+
+      <button
+        type="button"
+        (click)="addPhone()"
+        class="self-start mt-1 text-xs font-medium text-[#5B4FE9] hover:text-[#4438D1] inline-flex items-center gap-1">
+        <i class="pi pi-plus text-[10px]"></i>
+        Agregar otro teléfono
+      </button>
     </div>
 
   </form>
@@ -64,13 +110,13 @@
         label="Cancelar"
         severity="secondary"
         [outlined]="true" />
-         <button
-      pButton
-      type="submit"
-      form="contactForm"
-      [label]="headerTitle() ? 'Editar contacto' : 'Nuevo contacto'"
-      class="flex-1 justify-center">
-    </button>
+      <button
+        pButton
+        type="submit"
+        form="contactForm"
+        [label]="isEdit ? 'Guardar cambios' : 'Crear contacto'"
+        class="flex-1 justify-center">
+      </button>
     </div>
   </ng-template>
 
